@@ -239,6 +239,7 @@ class QuickDataFrame:
                     then if index is unique returns the one element
                     if not, returns a list of all the elements
         """
+        # TODO input list of columns
         if type(arg) == int:
             return self.row_as_dict(arg)
 
