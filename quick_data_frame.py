@@ -36,9 +36,11 @@ class QuickDataFrame:
 
     def append(self, row=None, value=None):
         """ three options for input
-            row = list
-            row = dict
-            value = not None   : puts the value for in element in the row
+            1. value = not None   : puts the value for in element in the row
+            2-3. row = not None
+                    row = list  : length should be equal to number of columns
+                    row = dict  : length should be equal to number of columns
+            * appending a row would reset the index to None
         """
         if value is not None:
             for col in self.cols:
@@ -69,6 +71,7 @@ class QuickDataFrame:
         self.data[name] = [copy(value) for _ in range(self.length)]
 
     def delete_column(self, name):
+        """deletes the column  if name is in columns"""
         if name in self.data:
             del self.data[name]
             self.cols.remove(name)
@@ -94,8 +97,8 @@ class QuickDataFrame:
         return [self.length, len(self.cols)]
 
     def row_as_dict(self, i):
-        """don't use it in large numbers. It slows you down"""
-        if i < 0 or i >= self.length:
+        """don't use this in large numbers. It slows you down"""
+        if i < 0 or self.length <= i:
             raise IndexError('index out of range')
         row = dict()
         for col in self.cols:
@@ -103,24 +106,44 @@ class QuickDataFrame:
         return row
 
     def row_as_list(self, i):
-        if i < 0 or i >= self.length:
+        if i < 0 or self.length <= i:
             raise IndexError('index out of range')
         row = []
         for col in self.cols:
             row.append(self.data[col][i])
         return row
 
-    def delete_row(self, i):
+    def delete_row(self, i, keep_index=False):
         """ deletes the ith row
-            resets the index
-            all rows after i would shift by one"""
-
-        if i < 0 or i >= self.length:
+            if keep_index is False, resets the index
+            all rows after i would shift by one
+        """
+        if i < 0 or self.length <= i:
             raise IndexError('index out of range')
         for col in self.cols:
             del self.data[col][i]
-        self.index = None
         self.length -= 1
+
+        if keep_index:
+            # then delete all i indices and decrease all i+k indices by 1
+            for key, val in self.index.items():
+                # if index is unique
+                if type(val) == int:
+                    if val == i:
+                        del self.index[key]
+                    elif val > i:
+                        self.index[key] -= 1
+                # if index is not unique
+                else:
+                    # remove i index
+                    if i in val: val.remove(i)
+                    if len(val) == 0: del self.index[key]
+                    # decrease indices>i
+                    for j in range(len(val)):
+                        if val[j] > i:
+                            val[j] -= 1
+        else:
+            self.index = None
 
     def apply(self, func, axis='columns'):
         result = []
@@ -156,6 +179,7 @@ class QuickDataFrame:
                 key = str(index_list[i])
                 if key in self.index:
                     raise Exception('index values must be unique if unique=True.')
+                # TODO: what to do with indexed that are also in cols
                 # if key in self.data:
                 #     raise Exception('index values must not be in column names.')
                 self.index[key] = i

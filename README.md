@@ -10,3 +10,5 @@ The simple table would be like this:
 | **2**      | qdf['col1'][2] | qdf['col2'][2] | qdf['col3'][2] |
 
 In which each column is a Python `list` that are all stored in a Python `dict`.
+
+
