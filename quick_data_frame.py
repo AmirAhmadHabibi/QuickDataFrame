@@ -36,20 +36,14 @@ class QuickDataFrame:
 
     def append(self, row=None, value=None):
         """ three options for input
-            1. value = not None   : puts the value for in element in the row
-            2-3. row = not None
+            1-2. row = not None
                     row = list  : length should be equal to number of columns
                     row = dict  : length should be equal to number of columns
+            3. value  : puts the value for in element in the row
+
             * appending a row would reset the index to None
         """
-        if value is not None:
-            for col in self.cols:
-                self.data[col].append(copy(value))
-
-            self.length += 1
-            self.index = None
-            return
-        elif row is not None:
+        if row is not None:
             if len(row) != len(self.cols):
                 raise Exception('Number of items in input row must be equal to the number of columns.')
 
@@ -59,8 +53,12 @@ class QuickDataFrame:
             elif type(row) == list:
                 for i in range(len(self.cols)):
                     self.data[self.cols[i]].append(copy(row[i]))
-            self.length += 1
-            self.index = None
+        else:
+            for col in self.cols:
+                self.data[col].append(copy(value))
+
+        self.length += 1
+        self.index = None
 
     def add_column(self, name, value=None):
         """Adds a column and fills it with None values"""
