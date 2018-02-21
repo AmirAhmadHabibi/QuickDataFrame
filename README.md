@@ -12,10 +12,13 @@ The simple table would be like this:
 In which each column is a Python `list` that are all stored in a Python `dict`.
 
 ## How to use
-To create a QDF simply give it a list of column names, or don't (you can add column later)
+To create a QDF simply give it a list of column names, or don't (you can add columns later)
 
 ```python
 qdf = QuickDataFrame(['name', 'school', 'id'])
+# or add columns later
+qdf = QuickDataFrame()
+qdf.add_column('name')
 ```
 
 
