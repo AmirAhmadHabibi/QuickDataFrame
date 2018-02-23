@@ -3,11 +3,12 @@ A quick simple table data structure in Python which is basicaly a `dict` of `lis
 
 The simple table would be like this:
 
-|  | column1           | column2           | column3           |
-:----: | :--------------: | :--------------: | :--------------: |
-_0_   | 45  | [3,4,6]  | 'pavement'  |
-_1_   |  0.234 | 0  |  None |
-_2_   | {'as','re'}  | (5,0)  |  's' |
+|     | column1 | column2 | column3 |
+:---: | :-----: | :-----: | :-----: |
+_0_   | 45  | [3,4,6] | 'pavement'  |
+_1_   |  0.234  | 0       |  None   |
+_2_   | {'as','re'} | (5,0)  |  's' |
+_3_   | 4 | 1  |  9 |
 
 In which each column is a Python `list` that are all stored in a Python `dict`.
 

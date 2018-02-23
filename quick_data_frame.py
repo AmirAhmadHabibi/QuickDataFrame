@@ -204,7 +204,7 @@ class QuickDataFrame:
         for i in range(len(self.cols)):
             out_str += str(self.cols[i])
             if i + 1 < len(self.cols):
-                out_str += ','
+                out_str += ',\t'
         out_str += '\n'
 
         for r in range(self.length):
@@ -215,7 +215,7 @@ class QuickDataFrame:
                     item = '"' + item + '"'
                 row_str += item
                 if i + 1 < len(self.cols):
-                    row_str += ','
+                    row_str += ',\t'
 
             if r + 1 < self.length:
                 row_str += '\n'
@@ -239,7 +239,7 @@ class QuickDataFrame:
                     then if index is unique returns the one element
                     if not, returns a list of all the elements
         """
-        # TODO input list of columns
+
         if type(arg) == int:
             return self.row_as_dict(arg)
 
@@ -279,9 +279,14 @@ class QuickDataFrame:
                     elements.append(self.data[col][i])
                 return elements
 
+        elif type(arg) == list:
+            # TODO input list of columns
+            return None
+        return None
+
     def __setitem__(self, key, value):
         """
-            qdf['foo_col', 'foo_index'] =value
+            qdf['foo_col', 'foo_index'] = value
 
             if index is not unique then value would be set to all those rows having the index
         """
