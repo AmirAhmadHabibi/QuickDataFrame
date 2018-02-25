@@ -45,6 +45,10 @@ print(qdf['name'][1])
 print(qdf[1])
 # to get a column
 print(qdf['name'])
+# to get a slice of rows as a new QDF
+print(qdf[3:14])
+# to get a list of columns as a new QDF
+print(qdf[['name', 'id']]) 
 ```
 There are also `to_csv` and `read_csv` methods.
 

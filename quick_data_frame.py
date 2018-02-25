@@ -256,7 +256,10 @@ class QuickDataFrame:
                     if not, returns a list of all the elements
 
             qdf[5:14]
-                if arg is a slice object, returns a new QDF with those rows
+                if arg is a slice object, returns a new QDF with a copy of those rows
+
+            qdf[['col1','col2']]
+                if arg is a list, returns a new QDF with a copy of those columns
         """
 
         if type(arg) == int:
@@ -308,8 +311,12 @@ class QuickDataFrame:
             return qdf
 
         elif type(arg) == list:
-            # TODO input list of columns
-            return None
+            qdf = QuickDataFrame()
+            for col in arg:
+                if col in self.data:
+                    qdf.add_column(col)
+                    qdf.data[col] = copy(self.data[col])
+            return qdf
         return None
 
     def __setitem__(self, key, value):
