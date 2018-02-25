@@ -96,16 +96,20 @@ class QuickDataFrame:
 
     def row_as_dict(self, i):
         """don't use this in large numbers. It slows you down"""
-        if i < 0 or self.length <= i:
+        if self.length <= abs(i):
             raise IndexError('index out of range')
+        if i < 0:
+            i = self.length - i
         row = dict()
         for col in self.cols:
             row[col] = self.data[col][i]
         return row
 
     def row_as_list(self, i):
-        if i < 0 or self.length <= i:
+        if self.length <= abs(i):
             raise IndexError('index out of range')
+        if i < 0:
+            i = self.length - i
         row = []
         for col in self.cols:
             row.append(self.data[col][i])
@@ -116,8 +120,10 @@ class QuickDataFrame:
             if keep_index is False, resets the index
             all rows after i would shift by one
         """
-        if i < 0 or self.length <= i:
+        if self.length <= abs(i):
             raise IndexError('index out of range')
+        if i < 0:
+            i = self.length - i
         for col in self.cols:
             del self.data[col][i]
         self.length -= 1
@@ -238,6 +244,9 @@ class QuickDataFrame:
                 if it's a tuple then uses arg[0] as column name and arg[1] as index name
                     then if index is unique returns the one element
                     if not, returns a list of all the elements
+
+            qdf[5:14]
+                if arg is a slice object, returns a new QDF with those rows
         """
 
         if type(arg) == int:
@@ -278,6 +287,14 @@ class QuickDataFrame:
                 for i in row_num:
                     elements.append(self.data[col][i])
                 return elements
+
+        elif type(arg) == slice:
+            if self.length <= abs(arg.start) or self.length < abs(arg.stop):
+                raise IndexError('index out of range')
+            qdf = QuickDataFrame(self.cols)
+            for i in range(*arg.indices(self.length)):
+                qdf.append(self.row_as_list(i))
+            return qdf
 
         elif type(arg) == list:
             # TODO input list of columns
