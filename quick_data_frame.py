@@ -109,7 +109,7 @@ class QuickDataFrame:
         if self.length <= abs(i):
             raise IndexError('index out of range')
         if i < 0:
-            i = self.length - i
+            i = self.length + i
         row = dict()
         for col in self.cols:
             row[col] = self.data[col][i]
@@ -119,7 +119,7 @@ class QuickDataFrame:
         if self.length <= abs(i):
             raise IndexError('index out of range')
         if i < 0:
-            i = self.length - i
+            i = self.length + i
         row = []
         for col in self.cols:
             row.append(self.data[col][i])
@@ -133,7 +133,7 @@ class QuickDataFrame:
         if self.length <= abs(i):
             raise IndexError('index out of range')
         if i < 0:
-            i = self.length - i
+            i = self.length + i
         for col in self.cols:
             del self.data[col][i]
         self.length -= 1
@@ -299,7 +299,8 @@ class QuickDataFrame:
                 return elements
 
         elif type(arg) == slice:
-            if self.length <= abs(arg.start) or self.length < abs(arg.stop):
+            if (arg.start is not None and self.length <= abs(arg.start)) or \
+                    (arg.stop is not None and self.length < abs(arg.stop)):
                 raise IndexError('index out of range')
             qdf = QuickDataFrame(self.cols)
             for i in range(*arg.indices(self.length)):
