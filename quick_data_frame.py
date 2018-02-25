@@ -82,6 +82,10 @@ class QuickDataFrame:
                 self.cols[self.cols.index(old)] = new
         return self
 
+    def shape(self):
+        """returns the number of rows, the number of columns"""
+        return [self.length, len(self.cols)]
+
     def rows_equal_to(self, column, value):
         """get a QDF containing the rows in which the given column have the given value"""
         qdf = QuickDataFrame(self.cols)
@@ -90,9 +94,15 @@ class QuickDataFrame:
                 qdf.append(self[i])
         return qdf
 
-    def shape(self):
-        """returns the number of rows, the number of columns"""
-        return [self.length, len(self.cols)]
+    def delete_rows_equal_to(self, column, value, keep_index=False):
+        bad_list = []
+        for i in range(self.length):
+            if self.data[column][i] == value:
+                bad_list.append(i)
+        removed = 0
+        for bad_index in bad_list:
+            self.delete_row(bad_index - removed, keep_index)
+            removed += 1
 
     def row_as_dict(self, i):
         """don't use this in large numbers. It slows you down"""
