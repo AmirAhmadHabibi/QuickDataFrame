@@ -140,22 +140,25 @@ class QuickDataFrame:
 
         if keep_index:
             # then delete all i indices and decrease all i+k indices by 1
+            bad_keys = set()
             for key, val in self.index.items():
                 # if index is unique
                 if type(val) == int:
                     if val == i:
-                        del self.index[key]
+                        bad_keys.add(key)
                     elif val > i:
                         self.index[key] -= 1
                 # if index is not unique
                 else:
                     # remove i index
                     if i in val: val.remove(i)
-                    if len(val) == 0: del self.index[key]
+                    if len(val) == 0: bad_keys.add(key)
                     # decrease indices>i
                     for j in range(len(val)):
                         if val[j] > i:
                             val[j] -= 1
+            for bk in bad_keys:
+                del self.index[bk]
         else:
             self.index = None
 
@@ -213,6 +216,10 @@ class QuickDataFrame:
             return False
         else:
             return True
+
+    def copy(self):
+        #TODO
+        pass
 
     def __str__(self):
         out_str = ''
