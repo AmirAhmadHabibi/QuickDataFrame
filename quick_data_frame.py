@@ -162,6 +162,12 @@ class QuickDataFrame:
         else:
             self.index = None
 
+    def delete_row_list(self, row_list, keep_index=False):
+        """deletes a list of rows"""
+        i_list = sorted(row_list, reverse=True)
+        for i in i_list:
+            self.delete_row(i, keep_index)
+
     def apply(self, func, axis='columns'):
         result = []
         if axis == 'columns':
@@ -218,7 +224,7 @@ class QuickDataFrame:
             return True
 
     def copy(self):
-        #TODO
+        # TODO
         pass
 
     def __str__(self):
