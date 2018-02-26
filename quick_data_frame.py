@@ -322,24 +322,31 @@ class QuickDataFrame:
     def __setitem__(self, key, value):
         """
             qdf['foo_col', 'foo_index'] = value
+                if index is not unique then value would be set to all those rows having the index
 
-            if index is not unique then value would be set to all those rows having the index
+            qdf['foo_col'] = value
+                value must be a list of the size of QDF
         """
-        col, ind = key
-        ind = str(ind)
-        if col not in self.data:
-            raise Exception('column not in column list')
-        if self.index is None:
-            raise Exception('the index has not been set. this method of get Item needs index')
-        if ind not in self.index:
-            raise Exception('Index key not in index')
+        if type(key) == tuple:
+            col, ind = key
+            ind = str(ind)
+            if col not in self.data:
+                raise Exception('column not in column list')
+            if self.index is None:
+                raise Exception('the index has not been set. this method of get Item needs index')
+            if ind not in self.index:
+                raise Exception('Index key not in index')
 
-        row_num = self.index[ind]
-        if type(row_num) == int:
-            self.data[col][row_num] = value
-        else:
-            for i in row_num:
-                self.data[col][i] = value
+            row_num = self.index[ind]
+            if type(row_num) == int:
+                self.data[col][row_num] = value
+            else:
+                for i in row_num:
+                    self.data[col][i] = value
+        elif type(key) == str:
+            if type(value) != list or len(value) != self.length:
+                raise Exception('value must be the same size as the QDF')
+            self.data[key] = copy(value)
 
     def __len__(self):
         return self.length
