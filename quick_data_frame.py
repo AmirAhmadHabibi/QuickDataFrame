@@ -130,10 +130,10 @@ class QuickDataFrame:
             if keep_index is False, resets the index
             all rows after i would shift by one
         """
-        if self.length <= abs(i):
-            raise IndexError('index out of range')
         if i < 0:
             i = self.length + i
+        if self.length <= i:
+            raise IndexError('index out of range')
         for col in self.cols:
             del self.data[col][i]
         self.length -= 1
@@ -416,4 +416,4 @@ class Progresser:
         re_str = str(int(retime / 3600)) + ':' + str(int((retime % 3600) / 60)) + ':' + str(int(retime % 60))
 
         so.write('\r' + self.msg + '\ttime: ' + el_str + ' + ' + re_str
-                 + '\t\tprogress: %' + str(round(100 * (current_num + 1) / self.total, 2)) + '\t')
+                 + '\t\tprogress: %' + str(round(100 * (current_num + 1) / self.total, 2)) + '\t ')
