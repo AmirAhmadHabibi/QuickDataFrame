@@ -329,6 +329,7 @@ class QuickDataFrame:
                 if col in self.data:
                     qdf.add_column(col)
                     qdf.data[col] = copy(self.data[col])
+            qdf.length = self.length
             return qdf
         return None
 
